@@ -72,7 +72,7 @@ cdef class PyRequest:
     cdef CefRefPtr[CefRequest] cefRequest
 
     cdef CefRefPtr[CefRequest] GetCefRequest(self) except *:
-        if <void*>self.cefRequest != NULL and self.cefRequest.get():
+        if self.cefRequest and self.cefRequest.get():
             return self.cefRequest
         raise Exception("PyRequest.GetCefRequest() failed: "
                         "CefRequest was destroyed")
@@ -229,7 +229,7 @@ cdef class PyRequest:
 
     cpdef py_void SetHeaderMap(self, dict headerMap):
         assert len(headerMap) > 0, "headerMap param is empty"
-        cpdef list headerMultimap = []
+        cdef list headerMultimap = []
         cdef object key
         for key in headerMap:
             headerMultimap.append((str(key), str(headerMap[key])))
